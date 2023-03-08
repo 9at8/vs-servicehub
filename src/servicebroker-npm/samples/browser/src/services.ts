@@ -9,6 +9,8 @@ import {
 } from '@microsoft/servicehub-framework'
 
 import CancellationToken from 'cancellationtoken'
+import EventEmitter from 'events'
+import StrictEventEmitter from 'strict-event-emitter-types/types/src'
 
 export interface IService {
 	readonly moniker: ServiceMoniker
@@ -37,7 +39,16 @@ export class Services {
 	}
 }
 
-export interface ICalculator {
+interface CalculatorEvents {
+	add: (one: number, two: number, result: number) => void
+}
+
+export type CalculatorEventEmitter = StrictEventEmitter<
+	EventEmitter,
+	CalculatorEvents
+>
+
+export interface ICalculator extends CalculatorEventEmitter {
 	add(
 		a: number,
 		b: number,

@@ -1,18 +1,29 @@
 import {
 	GlobalBrokeredServiceContainer,
 	MultiplexingRelayServiceBroker,
+	RpcEventServer,
 } from '@microsoft/servicehub-framework'
 import CancellationToken from 'cancellationtoken'
+import { EventEmitter } from 'stream'
 import { serverStream } from './pipe'
-import { ICalculator, Services } from './services'
+import { CalculatorEventEmitter, ICalculator, Services } from './services'
 
-class Calculator implements ICalculator {
+class Calculator
+	extends (EventEmitter as { new (): CalculatorEventEmitter })
+	implements ICalculator, RpcEventServer
+{
+	rpcEventNames = ['add']
+
 	public add(
 		a: number,
 		b: number,
 		cancellationToken?: CancellationToken
 	): Promise<number> {
-		return Promise.resolve(a + b)
+		const result = a + b
+
+		this.emit('add', a, b, result)
+
+		return Promise.resolve(result)
 	}
 }
 

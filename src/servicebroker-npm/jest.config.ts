@@ -8,6 +8,7 @@ const config: Config = {
 	testPathIgnorePatterns: [
 		'/js/',
 		'/node_modules/',
+		'samples/browser',
 	],
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 	collectCoverage: true,
